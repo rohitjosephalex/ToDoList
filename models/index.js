@@ -113,10 +113,7 @@ const findCount = async (status) => {
         connect()
         const results = await ToDoList.countDocuments({status:status})
         // console.log(results)
-        return {
-            statusCode: 200,
-            data: results
-        }
+        return (results)
 
     } catch (error) {
         console.log(error)
@@ -146,5 +143,5 @@ const findTasks = async (status) => {
         }
     }
 }
-// findTasks("cancelled")
+
 module.exports = { getAllTask, newTask,cancelTask,completeTask,deleteTask,findCount,findTasks }

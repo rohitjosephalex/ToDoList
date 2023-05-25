@@ -5,9 +5,11 @@ const task = require("../services/task")
 
 router.post('/newtask', async (req, res) => {
     try {
-        // console.log(req.body)
-        const resut = await models.newTask(req.body);
-        // console.log(resut)
+        const list={task:req.body.task,priority:req.body.priority};
+        // console.log(list)
+
+        const resut = await models.newTask(list);
+        console.log(resut)
         res.status(resut.statusCode).send(resut.data);
     }
     catch (err) {
@@ -17,8 +19,9 @@ router.post('/newtask', async (req, res) => {
 
 router.get('/alltask', async (req, res) => {
     try {
+        console.log("ALL task")
         const result = await task.listTask();
-        // console.log(result)
+        console.log(result)
         res.status(200).send(result.data);
     }
     catch (err) {
@@ -27,7 +30,7 @@ router.get('/alltask', async (req, res) => {
 });
 router.post('/canceltask', async (req, res) => {
     try {
-        const result = await models.cancelTask(req.body._id);
+        const result = await models.cancelTask(req.body.id);
         // console.log(result)
         res.status(200).send(result);
     }
@@ -38,9 +41,9 @@ router.post('/canceltask', async (req, res) => {
 
 router.post('/completetask', async (req, res) => {
     try {
-        // console.log(req.body._id)
-        const result = await models.completeTask(req.body._id);
-        // console.log(result)
+        console.log(req.body.id)
+        const result = await models.completeTask(req.body.id);
+        console.log(result)
         res.status(200).send(result);
     }
     catch (err) {
@@ -49,7 +52,7 @@ router.post('/completetask', async (req, res) => {
 });
 router.post('/deletetask', async (req, res) => {
     try {
-        const result = await models.deleteTask(req.body._id);
+        const result = await models.deleteTask(req.body.id);
         // console.log(result)
         res.status(200).send(result);
     }
@@ -58,41 +61,18 @@ router.post('/deletetask', async (req, res) => {
     }
 });
 
-router.get('/cancelledcount', async (req, res) => {
+router.get('/count', async (req, res) => {
     try {
-        const result = await models.findCount("cancelled");
-        // console.log(result)
-        res.status(200).send(result);
-    }
-    catch (err) {
-        console.log(err)
-    }
-});
-
-router.get('/completedcount', async (req, res) => {
-    try {
-        const result = await models.findCount("completed");
-        // console.log(result)
-        res.status(200).send(result);
-    }
-    catch (err) {
-        console.log(err)
-    }
-});
-
-router.get('/deletedcount', async (req, res) => {
-    try {
-        const result = await models.findCount("deleted");
-        // console.log(result)
-        res.status(200).send(result);
-    }
-    catch (err) {
-        console.log(err)
-    }
-});
-router.get('/ongoingcount', async (req, res) => {
-    try {
-        const result = await models.findCount("ongoing");
+        let result={
+            "pendingTasks":0,
+            "canceledTasks":0,
+            "deletedTasks":0,
+            "completedTasks":0
+        }
+         result.pendingTasks = await models.findCount("ongoing");
+         result.canceledTasks=await models.findCount("cancelled");
+         result.deletedTasks=await models.findCount("deleted");
+         result.completedTasks=await models.findCount("completed")
         // console.log(result)
         res.status(200).send(result);
     }

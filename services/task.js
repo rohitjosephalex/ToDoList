@@ -12,7 +12,7 @@ const listTask = async () => {
             "status": ''
         }
         task.No = i + 1;
-        task.id = id(result[i]._id);
+        task.id = result[i]._id;
         task.event = result[i].task;
         task.priority = result[i].priority;
         task.status = await statusLogo(result[i].status);
