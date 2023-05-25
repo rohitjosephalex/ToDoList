@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>To-Do List</title>
+  <style>
+    .completed {
+      text-decoration: line-through;
+      color: green;
+    }
+    .canceled {
+      text-decoration: line-through;
+      color: red;
+    }
+  </style>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>To-Do List</h1>
+  
+  <h2>Create a task:</h2>
+  <form id="taskForm">
+
+    <input type="text" id="taskInput" placeholder="Task name" required>
+    <input type="number" id="priorityInput" placeholder="Priority (1-9)" min="1" max="9" required>
+    <script type="text/javascript" src="api.js"></script>
+    <button type="submit" onclick="">Add Task</button>
+  </form>
+  
+  <h2>List of Tasks:</h2>
+  <ul id="taskList" ></ul>
+  
+  <h2>Report of Tasks:</h2>
+  <ul id="ongoingReport"></ul>
+  <ul id="ongoingList" ></ul>
+  <ul id="completedReport"></ul>
+  <ul id="completedList" ></ul>
+  <ul id="cancelledReport"></ul>
+  <ul id="cancelledList" ></ul> 
+   <ul id="deletedReport"></ul>
+  
+
+</body>
+</html>
