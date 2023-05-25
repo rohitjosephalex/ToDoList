@@ -3,6 +3,7 @@ const cors = require('cors');
 const app = express();
 const bodyParser = require('body-parser');
 const indexRouter = require('./routes/index');
+const helmet = require("helmet");
 const port = 8080 ;
 
 
@@ -11,6 +12,7 @@ const port = 8080 ;
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: false}));
+app.use(helmet());
 app.use(cors());
 
 

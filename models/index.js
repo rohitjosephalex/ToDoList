@@ -1,10 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const app = express();
 const ToDoList = require("./ToDoList")
 
+require('dotenv').config()
+// console.log(require('dotenv').config())
 
-const uri = `mongodb+srv://RJA:bsJY94Mn2lEBKoLt@cluster0.jfxy9ml.mongodb.net/ToDoList`;
+const uri = process.env.Mondo_DB_string;
+
+// console.log(uri)
 const connect = async () => {
     try {
         await mongoose.connect(uri);

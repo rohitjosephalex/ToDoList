@@ -83,4 +83,12 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
   background-color: #45a049;
+}   
+ .completed {
+  text-decoration: line-through;
+  color: green;
+}
+.canceled {
+  text-decoration: line-through;
+  color: red;
 }

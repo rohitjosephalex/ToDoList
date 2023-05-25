@@ -45,7 +45,8 @@ async function updateStatus(status,id){
       throw new Error("Request failed.");
     }
     response.json().then(function (result) {
-      alert("Reload for new list")
+      // alert("Reload for new list")
+      window.location.reload();
       console.log(result);
 })})
 .catch(error => {
@@ -73,9 +74,14 @@ document.getElementById("taskForm").addEventListener("submit", function (e) {
         throw new Error("Request failed.");
       }
       resetForm();
-      alert("Reload for new list")
+      // alert("Reload for new list")
+      // window.location.reload();
       return response.json();
     })
+    .then(() => {
+      window.location.reload();
+    })
+
     .catch(error => {
       console.error("Error:", error);
     });
