@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const ToDoList = require("./ToDoList")
 
 require('dotenv').config()
-// console.log(require('dotenv').config())
+
 
 const uri = process.env.Mondo_DB_string;
 

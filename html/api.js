@@ -1,5 +1,10 @@
+const headers = {
+  'Content-Type': 'application/json',
+  'Authorization': `eyJhbGciOiJIUzI1NiJ9.cm9vdA.MdGULJ7APSFUb7hUgHv4njl2Nu4Qed-PwwV4r-UEUk8`
+}; // auth header with bearer token
+
 async function getTasks() {
-  return await fetch('http://localhost:8080/api/task/alltask')
+  return await fetch('http://localhost:8080/api/task/alltask', { headers })
     .then(response => {
       if (!response.ok) {
         throw new Error("Request failed.");
@@ -11,8 +16,8 @@ async function getTasks() {
         taskList.innerHTML = "";
         tasks.forEach(function (tasks) {
           const listItem = document.createElement("li");
-          listItem.innerHTML ="<p>"+ tasks.No + ". " + tasks.event + " (" + tasks.priority + ")" + tasks.status+`<button id='completeButton' onclick='updateStatus("completetask","${tasks.id}")' >Complete</button>   <button id='cancelButton' onclick='updateStatus("canceltask","${tasks.id}")' >Cancel</button>     <button id='deleteButton' onclick='updateStatus("deletetask","${tasks.id}")' >Delete</button>`+"</p>" ;
-  
+          listItem.innerHTML = "<p>" + tasks.No + ". " + tasks.event + " (" + tasks.priority + ")" + tasks.status + `<button id='completeButton' onclick='updateStatus("completetask","${tasks.id}")' >Complete</button>   <button id='cancelButton' onclick='updateStatus("canceltask","${tasks.id}")' >Cancel</button>     <button id='deleteButton' onclick='updateStatus("deletetask","${tasks.id}")' >Delete</button>` + "</p>";
+
           taskList.appendChild(listItem);
         });
 
@@ -27,32 +32,32 @@ async function getTasks() {
 }
 getTasks()
 
-async function updateStatus(status,id){
-  console.log(status,id)
+async function updateStatus(status, id) {
+  console.log(status, id)
 
-  var task={
-    "id":id
+  var task = {
+    "id": id
   }
   return await fetch(`http://localhost:8080/api/task/${status}`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers,
     body: JSON.stringify(task)
   })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error("Request failed.");
-    }
-    response.json().then(function (result) {
-      // alert("Reload for new list")
-      window.location.reload();
-      console.log(result);
-})})
-.catch(error => {
-  console.log("Error:", error);
-});
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Request failed.");
+      }
+      response.json().then(function (result) {
+        // alert("Reload for new list")
+        window.location.reload();
+        console.log(result);
+      })
+    })
+    .catch(error => {
+      console.log("Error:", error);
+    });
 }
+
 
 // Function to make a POST request to add a new task
 document.getElementById("taskForm").addEventListener("submit", function (e) {
@@ -63,9 +68,7 @@ document.getElementById("taskForm").addEventListener("submit", function (e) {
   var x = { task, priority }
   return fetch('http://localhost:8080/api/task/newtask', {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    headers,
     body: JSON.stringify(x)
   })
     .then(response => {
@@ -97,10 +100,8 @@ function resetForm() {
 // Function to make a PUT request to update a task
 function updateTask(taskId, task) {
   return fetch(`https://api.example.com/tasks/${taskId}`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json'
-    },
+    method: 'POST',
+    headers,
     body: JSON.stringify(task)
   })
     .then(response => {
@@ -119,10 +120,11 @@ function updateTask(taskId, task) {
 
 
 
-function individualTask(taskStatus,listName) {
+function individualTask(taskStatus, listName) {
   // console.log(taskStatus,listName)
   return fetch(`http://localhost:8080/api/task/${taskStatus}`, {
-    method: 'GET'
+    method: 'GET',
+    headers
   })
     .then(response => {
       if (!response.ok) {
@@ -133,10 +135,10 @@ function individualTask(taskStatus,listName) {
         let tasks = result;
         var eachList = document.getElementById(`${listName}`);
         eachList.innerHTML = "";
-        var i=1;
+        var i = 1;
         tasks.forEach(function (tasks) {
           const listItem = document.createElement("li");
-          listItem.innerHTML ="<p>"+ i + ". " + tasks.task + " (" + tasks.priority + ")"+"</p>";
+          listItem.innerHTML = "<p>" + i + ". " + tasks.task + " (" + tasks.priority + ")" + "</p>";
           i++;
           eachList.appendChild(listItem);
         });
@@ -150,7 +152,7 @@ function individualTask(taskStatus,listName) {
 // individualTask("ongoingtask")
 
 async function taskReport() {
-  return await fetch('http://localhost:8080/api/task/count')
+  return await fetch('http://localhost:8080/api/task/count', { headers })
     .then(response => {
       if (!response.ok) {
         throw new Error("Request failed.");
@@ -158,21 +160,21 @@ async function taskReport() {
       response.json().then(function (result) {
         // console.log(result)
         let tasks = result;
-       
+
         const ongoingReport = document.getElementById("ongoingReport");
-        ongoingReport.innerHTML = "<p>Pending Tasks: " + tasks.pendingTasks+"</p>" ;
-        individualTask("ongoingtask","ongoingList");
-      
+        ongoingReport.innerHTML = "<p>Pending Tasks: " + tasks.pendingTasks + "</p>";
+        individualTask("ongoingtask", "ongoingList");
+
         const completedReport = document.getElementById("completedReport");
-        completedReport.innerHTML = "<p>completed Tasks: " + tasks.completedTasks+"</p>" ;
-        individualTask("completedtask","completedList");
+        completedReport.innerHTML = "<p>completed Tasks: " + tasks.completedTasks + "</p>";
+        individualTask("completedtask", "completedList");
 
         const cancelledReport = document.getElementById("cancelledReport");
-        cancelledReport.innerHTML = "<p>canceled Tasks: " + tasks.canceledTasks+"</p>" ;
-        individualTask("cancelledtask","cancelledList");
+        cancelledReport.innerHTML = "<p>canceled Tasks: " + tasks.canceledTasks + "</p>";
+        individualTask("cancelledtask", "cancelledList");
 
         const deletedReport = document.getElementById("deletedReport")
-        deletedReport.innerHTML = "<p>Deleted Tasks: " + tasks.deletedTasks+"</p>" ;
+        deletedReport.innerHTML = "<p>Deleted Tasks: " + tasks.deletedTasks + "</p>";
         //   +
         //   "<p>Canceled Tasks: " + tasks.canceledTasks + "</p>" +
         //   "<p>Deleted Tasks: " + tasks.deletedTasks + "</p>" +

@@ -3,8 +3,10 @@ const router = express.Router();
 const models = require("../models/index")
 const task = require("../services/task")
 
+// To add a new task
 router.post('/newtask', async (req, res) => {
     try {
+      
         const list={task:req.body.task,priority:req.body.priority};
         // console.log(list)
 
@@ -17,17 +19,22 @@ router.post('/newtask', async (req, res) => {
     }
 });
 
+// To get all tasks
 router.get('/alltask', async (req, res) => {
     try {
+        // const authHeader = req.headers['authorization'];
+        // console.log(authHeader)
         console.log("ALL task")
         const result = await task.listTask();
-        console.log(result)
+        // console.log(result)
         res.status(200).send(result.data);
     }
     catch (err) {
         console.log(err)
     }
 });
+
+// To cancel a task
 router.post('/canceltask', async (req, res) => {
     try {
         const result = await models.cancelTask(req.body.id);
@@ -39,6 +46,7 @@ router.post('/canceltask', async (req, res) => {
     }
 });
 
+// To complete a task
 router.post('/completetask', async (req, res) => {
     try {
         console.log(req.body.id)
@@ -50,6 +58,8 @@ router.post('/completetask', async (req, res) => {
         console.log(err)
     }
 });
+
+// To delete a task
 router.post('/deletetask', async (req, res) => {
     try {
         const result = await models.deleteTask(req.body.id);
@@ -61,6 +71,7 @@ router.post('/deletetask', async (req, res) => {
     }
 });
 
+// To take count of different tasks 
 router.get('/count', async (req, res) => {
     try {
         let result={
@@ -81,6 +92,7 @@ router.get('/count', async (req, res) => {
     }
 });
 
+// To get all cancelled tasks 
 router.get('/cancelledtask', async (req, res) => {
     try {
         const result = await models.findTasks("cancelled");
@@ -92,6 +104,7 @@ router.get('/cancelledtask', async (req, res) => {
     }
 });
 
+// To get all completed tasks 
 router.get('/completedtask', async (req, res) => {
     try {
         const result = await models.findTasks("completed");
@@ -103,8 +116,12 @@ router.get('/completedtask', async (req, res) => {
     }
 });
 
+// To get all ongoing tasks 
 router.get('/ongoingtask', async (req, res) => {
     try {
+        console.log("ongoing Task")
+        const authHeader = req.headers
+        console.log(authHeader)
         const result = await models.findTasks("ongoing");
         // console.log(result)
         res.status(200).send(result.data);
